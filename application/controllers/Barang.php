@@ -130,7 +130,7 @@ class Barang extends CI_Controller
     {
         $config['upload_path']          = 'assets/upload/';
         $config['allowed_types']        = 'gif|jpg|png|jpeg';
-        $config['max_size']             = 2000;
+        $config['max_size']             = 100;
         $config['file_name']            = round(microtime(true) * 1000);
 
         $this->load->library('upload', $config);
