@@ -248,4 +248,4 @@ class Barang extends CI_Controller
     }
 }
 
-/* End of file Test.php */
+/* End of file Barang.php */
