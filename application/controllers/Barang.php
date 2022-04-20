@@ -24,7 +24,9 @@ class Barang extends CI_Controller
 
     public function barang_list()
     {
-        $this->load->helper('url');
+        if (!$this->input->is_ajax_request()) {
+            exit('No direct script access allowed');
+        }
 
         $list = $this->barang->get_datatables();
         $data = array();
@@ -69,13 +71,17 @@ class Barang extends CI_Controller
 
     public function barang_tambah()
     {
+        if (!$this->input->is_ajax_request()) {
+            exit('No direct script access allowed');
+        }
+
         $this->_validasi_tambah();
 
         $data = array(
-            'nama_barang' => $this->input->post('nama_barang'),
-            'harga_beli' => $this->remove_comma($this->input->post('harga_beli')),
-            'harga_jual' => $this->remove_comma($this->input->post('harga_jual')),
-            'stok' => $this->input->post('stok'),
+            'nama_barang' => htmlspecialchars($this->input->post('nama_barang')),
+            'harga_beli' => $this->remove_comma(htmlspecialchars($this->input->post('harga_beli'))),
+            'harga_jual' => $this->remove_comma(htmlspecialchars($this->input->post('harga_jual'))),
+            'stok' => htmlspecialchars($this->input->post('stok')),
         );
 
 
@@ -92,12 +98,16 @@ class Barang extends CI_Controller
 
     public function barang_update()
     {
+        if (!$this->input->is_ajax_request()) {
+            exit('No direct script access allowed');
+        }
+
         $this->_validasi_update();
         $data = array(
-            'nama_barang' => $this->input->post('nama_barang'),
-            'harga_beli' => $this->remove_comma($this->input->post('harga_beli')),
-            'harga_jual' => $this->remove_comma($this->input->post('harga_jual')),
-            'stok' => $this->input->post('stok'),
+            'nama_barang' => htmlspecialchars($this->input->post('nama_barang')),
+            'harga_beli' => $this->remove_comma(htmlspecialchars($this->input->post('harga_beli'))),
+            'harga_jual' => $this->remove_comma(htmlspecialchars($this->input->post('harga_jual'))),
+            'stok' => htmlspecialchars($this->input->post('stok')),
         );
 
         if ($this->input->post('hapus_foto_barang')) {
@@ -129,6 +139,9 @@ class Barang extends CI_Controller
 
     public function barang_hapus($id)
     {
+        if (!$this->input->is_ajax_request()) {
+            exit('No direct script access allowed');
+        }
         //delete file
         $barang = $this->barang->get_by_id($id);
         if (file_exists('assets/upload/' . $barang->foto_barang) && $barang->foto_barang)
