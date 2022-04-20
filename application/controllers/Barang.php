@@ -39,7 +39,7 @@ class Barang extends CI_Controller
             $row[] = $this->rupiah($barang->harga_jual);
             $row[] = $barang->stok;
             if ($barang->foto_barang)
-                $row[] = '<a href="' . base_url('upload/' . $barang->foto_barang) . '" target="_blank"><img src="' . base_url('assets/upload/' . $barang->foto_barang) . '" class="img-responsive" /></a>';
+                $row[] = '<a href="' . base_url('upload/' . $barang->foto_barang) . '" target="_blank"><img src="' . base_url('assets/upload/' . $barang->foto_barang) . '" class="img-responsive" width="70" /></a>';
             else
                 $row[] = '(No Foto Barang)';
 
