@@ -15,6 +15,13 @@ class Barang extends CI_Controller
         $this->load->view('barang');
     }
 
+    private function rupiah($angka)
+    {
+
+        $hasil_rupiah = "Rp " . number_format($angka, 2, ',', '.');
+        return $hasil_rupiah;
+    }
+
     public function barang_list()
     {
         $this->load->helper('url');
@@ -26,8 +33,8 @@ class Barang extends CI_Controller
             $no++;
             $row = array();
             $row[] = $barang->nama_barang;
-            $row[] = $barang->harga_beli;
-            $row[] = $barang->harga_jual;
+            $row[] = $this->rupiah($barang->harga_beli);
+            $row[] = $this->rupiah($barang->harga_jual);
             $row[] = $barang->stok;
             if ($barang->foto_barang)
                 $row[] = '<a href="' . base_url('upload/' . $barang->foto_barang) . '" target="_blank"><img src="' . base_url('assets/upload/' . $barang->foto_barang) . '" class="img-responsive" /></a>';
@@ -66,8 +73,8 @@ class Barang extends CI_Controller
 
         $data = array(
             'nama_barang' => $this->input->post('nama_barang'),
-            'harga_beli' => $this->input->post('harga_beli'),
-            'harga_jual' => $this->input->post('harga_jual'),
+            'harga_beli' => $this->remove_comma($this->input->post('harga_beli')),
+            'harga_jual' => $this->remove_comma($this->input->post('harga_jual')),
             'stok' => $this->input->post('stok'),
         );
 
@@ -88,8 +95,8 @@ class Barang extends CI_Controller
         $this->_validasi_update();
         $data = array(
             'nama_barang' => $this->input->post('nama_barang'),
-            'harga_beli' => $this->input->post('harga_beli'),
-            'harga_jual' => $this->input->post('harga_jual'),
+            'harga_beli' => $this->remove_comma($this->input->post('harga_beli')),
+            'harga_jual' => $this->remove_comma($this->input->post('harga_jual')),
             'stok' => $this->input->post('stok'),
         );
 
@@ -113,6 +120,11 @@ class Barang extends CI_Controller
         $this->barang->update(array('id' => $this->input->post('id')), $data);
         echo json_encode(array("status" => TRUE));
         exit;
+    }
+
+    private function remove_comma($value)
+    {
+        return preg_replace('/[^\d.]/', '', $value);
     }
 
     public function barang_hapus($id)
