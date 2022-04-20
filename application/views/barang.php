@@ -59,8 +59,30 @@
         var table;
         var base_url = '<?= base_url(); ?>';
 
+
+
         $(document).ready(function() {
 
+            $('.beli-num').keyup(function(event) {
+                // skip for arrow keys
+                if (event.which >= 37 && event.which <= 40) return;
+                // format number
+                $(this).val(function(index, value) {
+                    return value
+                        .replace(/\D/g, "")
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                });
+            });
+            $('.jual-num').keyup(function(event) {
+                // skip for arrow keys
+                if (event.which >= 37 && event.which <= 40) return;
+                // format number
+                $(this).val(function(index, value) {
+                    return value
+                        .replace(/\D/g, "")
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                });
+            });
 
             table = $('#table').DataTable({
 
@@ -196,6 +218,7 @@
                         $('#modal_form').modal('hide');
                         refresh_table();
                     } else {
+                        // console.log(data.inputerror);
                         for (var i = 0; i < data.inputerror.length; i++) {
                             $('[name="' + data.inputerror[i] + '"]').parent().parent().addClass('has-error');
                             $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
@@ -256,14 +279,14 @@
                             <div class="form-group">
                                 <label class="control-label col-md-3">Harga Beli</label>
                                 <div class="col-md-9">
-                                    <input name="harga_beli" placeholder="Harga Beli" class="form-control" type="number">
+                                    <input name="harga_beli" placeholder="Harga Beli" class="form-control beli-num" type="text">
                                     <span class="help-block"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-3">Harga Jual</label>
                                 <div class="col-md-9">
-                                    <input name="harga_jual" placeholder="Harga Jual" class="form-control" type="number">
+                                    <input name="harga_jual" placeholder="Harga Jual" class="form-control jual-num" type="text">
                                     <span class="help-block"></span>
                                 </div>
                             </div>

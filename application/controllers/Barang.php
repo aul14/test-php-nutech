@@ -62,7 +62,7 @@ class Barang extends CI_Controller
 
     public function barang_tambah()
     {
-        $this->_validasi();
+        $this->_validasi_tambah();
 
         $data = array(
             'nama_barang' => $this->input->post('nama_barang'),
@@ -70,6 +70,7 @@ class Barang extends CI_Controller
             'harga_jual' => $this->input->post('harga_jual'),
             'stok' => $this->input->post('stok'),
         );
+
 
         if (!empty($_FILES['foto_barang']['name'])) {
             $upload = $this->_do_upload();
@@ -84,7 +85,7 @@ class Barang extends CI_Controller
 
     public function barang_update()
     {
-        $this->_validasi();
+        $this->_validasi_update();
         $data = array(
             'nama_barang' => $this->input->post('nama_barang'),
             'harga_beli' => $this->input->post('harga_beli'),
@@ -145,7 +146,58 @@ class Barang extends CI_Controller
         return $this->upload->data('file_name');
     }
 
-    private function _validasi()
+    private function _validasi_tambah()
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+
+        $cek_barang = $this->db->select('nama_barang')
+            ->from('barang')
+            ->where('nama_barang', $this->input->post('nama_barang'))
+            ->get()
+            ->row_array();
+
+
+        if (!empty($cek_barang['nama_barang'])) {
+            $data['inputerror'][] = 'nama_barang';
+            $data['error_string'][] = 'Nama barang must be unique';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('nama_barang') == '') {
+            $data['inputerror'][] = 'nama_barang';
+            $data['error_string'][] = 'Nama barang is required';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('harga_beli') == '') {
+            $data['inputerror'][] = 'harga_beli';
+            $data['error_string'][] = 'Harga beli is required';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('harga_jual') == '') {
+            $data['inputerror'][] = 'harga_jual';
+            $data['error_string'][] = 'Harga jual is required';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('stok') == '') {
+            $data['inputerror'][] = 'stok';
+            $data['error_string'][] = 'Stok is required';
+            $data['status'] = FALSE;
+        }
+
+
+        if ($data['status'] === FALSE) {
+            echo json_encode($data);
+            exit;
+        }
+    }
+
+    private function _validasi_update()
     {
         $data = array();
         $data['error_string'] = array();
